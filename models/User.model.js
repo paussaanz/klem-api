@@ -7,43 +7,71 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const userSchema = mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: [true, 'Required field'],
-      trim: true
-    },
-    surname: {
-      type: String,
-      required: [true, 'Required field'],
-      trim: true
-    },
-    username: {
-      type: String,
-      unique: true,
-      required: [true, 'Required field'],
-      trim: true
-    },
     email: {
       type: String,
+      required: true,
       unique: true,
-      required: [true, 'Required field'],
-      match: [EMAIL_REGEX, 'Add a valid email'],
       trim: true,
       lowercase: true,
+      match: [EMAIL_REGEX, 'Add a valid email'],
     },
     password: {
       type: String,
-      required: [true, 'Required field'],
-      minlength: [8, "invalid length"],
+      required: true
     },
-    imageUrl: {
+    firstName: {
       type: String,
-      default: 'https://cdn.iconscout.com/icon/free/png-256/free-imageUrl-370-456322.png'
+      required: true
+    },
+    lastName: {
+      type: String,
+      required: true
+    },
+    profileImage: {
+      type: String,
+      default: ''
     },
     position: {
-      type: String, 
-      trim: true
-    }
+      type: String,
+    },
+    duties: {
+      type: String,
+    },
+    schedule: {
+      type: String,
+    },
+    developmentGoals: {
+      type: String,
+    },
+    extraSkills: {
+      type: String,
+      default: ''
+    },
+    hobbies: {
+      type: String,
+      default: ''
+    },
+    team: {
+      type: String,
+    },
+    clients: [{
+      type: String
+    }],
+    formagameScore: {
+      type: Number,
+      default: 0
+    },
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Company',
+    },
+    team: {
+      type: String
+    },
+    clientsWorkingOn: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Client'
+    }]
   },
   {
     timestamps: true,
@@ -86,15 +114,5 @@ userSchema.pre("save", function (next) {
   }
 });
 
-// userSchema.pre("save", async function(next) {
-//   if (!this.isModified("password")) return next();
-//   try {
-//       const hashed = await bcrypt.hash(this.password, ROUNDS);
-//       this.password = hashed;
-//       next();
-//   } catch (error) {
-//       next(error);
-//   }
-// });
 const User = mongoose.model('User', userSchema);
 module.exports = User

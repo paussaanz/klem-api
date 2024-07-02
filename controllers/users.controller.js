@@ -12,7 +12,7 @@ module.exports.createUser = (req, res, next) => {
   }
 
   if (req.file) {
-    userToCreate.imageUrl = req.file.path;
+    userToCreate.profileImage = req.file.path;
   }
 
   User.findOne({ email: req.body.email })
@@ -115,7 +115,6 @@ module.exports.getUser = (req, res, next) => {
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.currentUserId)
-    .populate('tasks')
     .then((user) => {
       if (!user) {
         next(createError(402, "User not found"));
